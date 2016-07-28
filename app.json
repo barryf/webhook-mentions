@@ -1,0 +1,23 @@
+{
+  "name": "Webhook Mentions",
+  "description": "Send webmentions when you add new posts to your GitHub Pages site",
+  "repository": "https://github.com/barryf/webhook-mentions",
+  "env": {
+    "ROOT_URL": {
+      "description": "The root URL of your GitHub Pages site, e.g. https://barryf.github.io",
+      "value": ""
+    },
+    "GITHUB_ACCESS_TOKEN": {
+      "description": "A personal access token for your GitHub Pages site. You will need to grant it the public_repo scope.",
+      "value": ""
+    },
+    "GITHUB_USER": {
+      "description": "Your GitHub username, e.g. barryf",
+      "value": ""
+    },
+    "GITHUB_REPO": {
+      "description": "Your GitHub Pages site repository name, e.g. barryf.github.io",
+      "value": ""
+    }
+  }
+}
