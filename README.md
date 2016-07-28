@@ -4,6 +4,8 @@ This is a small web app that sends [Webmentions](http://webmention.net) to any l
 
 Deploy the app and then set up a webhook from your GitHub Pages repository to it and whenever a post is successfully pushed webmentions will be sent to any links.
 
+Webmention is a technology developed by the [IndieWeb](https://indieweb.org) community.
+
 ## Deploy
 
 I recommend running this on Heroku using the _Deploy to Heroku_ button. You can host it yourself but will need to define the environment variables below.
