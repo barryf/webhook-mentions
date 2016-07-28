@@ -6,7 +6,7 @@ Deploy the app and then set up a webhook from your GitHub Pages repository to it
 
 Webmention is a technology developed by the [IndieWeb](https://indieweb.org) community.
 
-**NB: Your GitHub Pages blog must (currently) use the default `yyyy-mm-dd-slug.html` permalink style.**
+**NB: Your GitHub Pages blog must (currently) use the default `yyyy/mm/dd/slug.html` permalink style.**
 
 ## Deploy
 
