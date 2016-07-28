@@ -22,7 +22,6 @@ GEM
     octokit (4.3.0)
       sawyer (~> 0.7.0, >= 0.5.3)
     pkg-config (1.1.7)
-    puma (3.6.0)
     rack (1.6.4)
     rack-contrib (1.4.0)
       git-version-bump (~> 0.15)
@@ -60,7 +59,6 @@ PLATFORMS
 DEPENDENCIES
   dotenv
   octokit
-  puma
   rack-contrib
   shotgun
   sinatra
