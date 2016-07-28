@@ -4,7 +4,6 @@ class Server < Sinatra::Application
   helpers Sinatra::LinkHeader
 
   configure do
-    set :server, :puma
     %w( root_url github_access_token github_user github_repo ).each do |v|
       set v.to_sym, ENV.fetch(v.to_s.upcase)
     end
