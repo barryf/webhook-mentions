@@ -24,7 +24,7 @@ EOS
   end
 
   describe "#initialize" do
-    describe "given content with front matter" do
+    context "given content with front matter" do
       it "should parse the front matter into a hash" do
         expect(@post_full.front_matter).to be_a(Hash)
       end
@@ -32,7 +32,7 @@ EOS
   end
 
   describe "#categories" do
-    describe "given front matter with two categories" do
+    context "given front matter with two categories" do
       it "should return a slash separated list of those categories" do
         expect(@post_full.categories).to eql("one/two")
       end
@@ -40,12 +40,12 @@ EOS
   end
 
   describe "#slug" do
-    describe "given a custom slug" do
+    context "given a custom slug" do
       it "should respect that slug" do
         expect(@post_full.slug).to eql("my-custom-slug")
       end
     end
-    describe "with no slug" do
+    context "with no slug" do
       it "should derive a slug from the filename" do
         expect(@post_simple.slug).to eql("an-example-post")
       end
@@ -53,7 +53,7 @@ EOS
   end
 
   describe "#post_date" do
-    describe "with no date specified" do
+    context "with no date specified" do
       it "should parse the date from the filename" do
         expect(@post_simple.post_date).to eql(Date.parse("2016-08-24"))
       end
