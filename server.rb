@@ -1,7 +1,6 @@
-require 'date'
+require 'base64'
 
 class Server < Sinatra::Application
-  helpers Sinatra::LinkHeader
 
   configure do
     %w( root_url github_access_token github_user github_repo ).each do |v|
@@ -32,7 +31,7 @@ class Server < Sinatra::Application
 
   def process_file(file)
     logger.info "Processing file #{file['filename']} (#{file['status']})"
-    url = url_from_filename(file['filename'])
+    url = absolute_url(post_url(file['filename']))
     headers 'Location' => url
     logger.info "URL for #{file['filename']} is #{url}"
     Webmention::Client.new(url).send_mentions
@@ -47,9 +46,34 @@ class Server < Sinatra::Application
     octokit.commit(github_full_repo, sha)
   end
 
-  #def get_file_contents(filename)
-  #  octokit.contents(github_full_repo, filename).content
-  #end
+  def get_file_contents(filename)
+    base64_contents = octokit.contents(github_full_repo, { path: filename }).content
+    Base64.decode64(base64_contents)
+  end
+
+  def style_to_template(style)
+    case style.to_sym
+    when :pretty
+      "/:categories/:year/:month/:day/:title/"
+    when :none
+      "/:categories/:title.html"
+    when :date
+      "/:categories/:year/:month/:day/:title.html"
+    when :ordinal
+      "/:categories/:year/:y_day/:title.html"
+    else
+      style.to_s
+    end
+  end
+
+  def get_config_permalink_style
+    config_yaml = get_file_contents('_config.yml')
+    config = YAML.load(config_yaml)
+    style = config['permalink'] || 'date'
+    permalink_style = style_to_template(style)
+    logger.info "Permalink style is #{permalink_style}"
+    permalink_style
+  end
 
   def octokit
     @octokit ||= Octokit::Client.new(access_token: settings.github_access_token)
@@ -59,13 +83,30 @@ class Server < Sinatra::Application
     "#{settings.github_user}/#{settings.github_repo}"
   end
 
-  def url_from_filename(filename)
-    # TODO: adapt to the permalink config
-    # e.g. "_posts/2016-07-18-something-from-quill.md"
-    date = Date.parse(filename)
-    r = /^_posts\/[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-([A-Za-z0-9-]*)\./
-    slug = r.match(filename)[1]
-    "#{settings.root_url}/#{date.strftime('%Y/%m/%d')}/#{slug}.html"
+  def permalink_style
+    @permalink_style ||= get_config_permalink_style
+  end
+
+  def post_url(filename)
+    contents = get_file_contents(filename)
+    post = Post.new(filename, contents)
+    unless post.permalink.nil?
+      return post.permalink
+    end
+    placeholders = {}
+    [ :slug, :date, :year, :month, :i_month, :day, :i_day, :short_year,
+        :hour, :minute, :second, :title, :slug, :categories ].each do |ph|
+      placeholders[ph] = post.send(ph)
+    end
+    permalink = Jekyll::URL.new({
+      template: permalink_style,
+      placeholders: placeholders
+    }).to_s
+  end
+
+  def absolute_url(relative_url)
+    slash = relative_url.start_with?("/") ? "" : "/"
+    settings.root_url + slash + relative_url
   end
 
 end

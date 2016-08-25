@@ -10,5 +10,6 @@ Dotenv.load if env == :development
 # automatically parse json in the body
 use Rack::PostBodyContentTypeParser
 
-require 'server'
+require_relative 'post'
+require_relative 'server'
 run Server
