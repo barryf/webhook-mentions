@@ -6,7 +6,7 @@ class Post
   attr_reader :slug, :date, :year, :month, :i_month, :day, :i_day, :short_year,
   :hour, :minute, :second, :title, :slug, :categories
 
-  FILENAME_SLUG_REGEX = /^_posts\/[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-([a-z0-9-]*)(\.[a-z]*|\/)?$/
+  FILENAME_SLUG_REGEX = /^_posts\/[0-9]{4}\-[0-9]{2}\-[0-9]{2}\-([A-Za-z0-9\-\s]*)(\.[a-z]*|\/)?$/
 
   def initialize(filename, contents)
     @filename = filename
